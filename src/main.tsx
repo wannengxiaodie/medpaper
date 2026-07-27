@@ -9,7 +9,7 @@ import FluidBackground from './components/FluidBackground.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} storageKey="medpaper.theme">
-      <BrowserRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL}>
         <FluidBackground />
         <App />
       </BrowserRouter>
