@@ -83,11 +83,11 @@ export function saveBase(base: string) {
 }
 
 export async function checkStatus(apiKey: string): Promise<LlmStatus> {
+  // 用户在前端输入了密钥时，视为 byok 已配置（静态托管下 /api 不存在，必须先判断）
+  if (apiKey.trim()) return { configured: true, mode: "byok" };
   try {
     const res = await fetch("/api/llm/status");
     const data = (await res.json()) as LlmStatus;
-    // 用户在前端输入了密钥时，视为 byok 已配置
-    if (apiKey.trim()) return { configured: true, mode: "byok" };
     return data;
   } catch {
     return { configured: false, mode: "none" };
