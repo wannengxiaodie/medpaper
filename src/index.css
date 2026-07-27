@@ -202,8 +202,8 @@
   box-shadow: 0 0 12px 3px rgb(255 255 255 / 0.35);
 }
 @keyframes pipeline-flow {
-  0%   { top: 2.5rem; opacity: 0; }
+  0%   { left: 1%; opacity: 0; }
   12%  { opacity: 1; }
   88%  { opacity: 1; }
-  100% { top: calc(100% - 3rem); opacity: 0; }
+  100% { left: 99%; opacity: 0; }
 }

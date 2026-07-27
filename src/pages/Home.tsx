@@ -1,5 +1,6 @@
+import { Fragment } from "react";
 import { Link } from "react-router";
-import { ArrowDown, ArrowRight, BookOpen, FlaskConical, PackageCheck, PenLine, ShieldCheck, Sparkles, Microscope } from "lucide-react";
+import { ArrowRight, BookOpen, FlaskConical, PackageCheck, PenLine, ShieldCheck, Sparkles, Microscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
 import { PIPELINE_STAGES, AGENTS } from "@/engine/types";
@@ -132,49 +133,50 @@ export default function Home() {
           <p className="mt-3 max-w-lg text-neutral-500 dark:text-neutral-400">
             每个阶段由专属智能体负责，输出结构化结果并驱动下一阶段。
           </p>
-          <div className="relative mt-14">
-            {/* 流水线轨道 */}
-            <div className="absolute bottom-10 left-[27px] top-10 w-px bg-gradient-to-b from-teal-600/50 via-amber-600/50 to-blue-600/50 dark:from-teal-400/40 dark:via-amber-400/40 dark:to-blue-400/40" />
-            {/* 轨道上的流动脉冲 */}
-            <div className="pipeline-pulse absolute left-[24px] top-10 h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
-            <div>
-              {PIPELINE_STAGES.map((s, i) => (
-                <div key={s.key}>
-                  {/* 模块 */}
-                  <div className="group relative flex items-center gap-4 md:gap-5">
-                    <div
-                      className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-base font-bold text-white shadow-md transition duration-300 group-hover:scale-110"
-                      style={{ backgroundColor: AGENTS[s.agent].color }}
-                    >
-                      {String(s.index).padStart(2, "0")}
-                    </div>
-                    <div className="flex min-w-0 flex-1 items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white/85 px-5 py-4 backdrop-blur transition duration-300 group-hover:-translate-y-0.5 group-hover:border-neutral-300 group-hover:shadow-lg dark:border-white/10 dark:bg-white/[0.04] dark:group-hover:border-white/25">
-                      <div className="min-w-0">
-                        <div className="text-base font-semibold">{s.title}</div>
-                        <div className="mt-0.5 truncate text-sm text-neutral-500 dark:text-neutral-400">{s.subtitle}</div>
-                      </div>
+          <div className="relative mt-14 overflow-x-auto pb-2">
+            <div className="relative min-w-[880px] px-2">
+              {/* 横向流水线轨道（穿过节点中心） */}
+              <div className="absolute left-0 right-0 top-[23px] h-px bg-gradient-to-r from-teal-600/50 via-amber-600/50 to-blue-600/50 dark:from-teal-400/40 dark:via-amber-400/40 dark:to-blue-400/40" />
+              {/* 轨道上的流动脉冲 */}
+              <div className="pipeline-pulse absolute top-[19px] h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
+              <div className="flex items-start">
+                {PIPELINE_STAGES.map((s, i) => (
+                  <Fragment key={s.key}>
+                    {/* 模块 */}
+                    <div className="group flex min-w-0 flex-1 flex-col items-center text-center">
                       <div
-                        className="hidden shrink-0 rounded-full px-3 py-1 text-xs font-medium text-white sm:block"
+                        className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-sm font-bold text-white shadow-md transition duration-300 group-hover:scale-110"
                         style={{ backgroundColor: AGENTS[s.agent].color }}
                       >
-                        {AGENTS[s.agent].name}
+                        {String(s.index).padStart(2, "0")}
+                      </div>
+                      <div className="mt-3 w-full rounded-2xl border border-neutral-200 bg-white/85 px-3 py-3 backdrop-blur transition duration-300 group-hover:-translate-y-0.5 group-hover:border-neutral-300 group-hover:shadow-lg dark:border-white/10 dark:bg-white/[0.04] dark:group-hover:border-white/25">
+                        <div className="text-sm font-semibold">{s.title}</div>
+                        <div className="mt-1 truncate text-xs text-neutral-500 dark:text-neutral-400">{s.subtitle}</div>
+                        <div
+                          className="mx-auto mt-2 w-fit rounded-full px-2 py-0.5 text-[10px] font-medium text-white"
+                          style={{ backgroundColor: AGENTS[s.agent].color }}
+                        >
+                          {AGENTS[s.agent].name}
+                        </div>
+                      </div>
+                      {/* 向下游传递的产物 */}
+                      <div className="mt-2 inline-flex items-center gap-1 rounded-full border border-dashed border-neutral-300 bg-white/60 px-2.5 py-1 text-[11px] text-neutral-500 backdrop-blur dark:border-white/15 dark:bg-white/[0.03] dark:text-neutral-400">
+                        {i === PIPELINE_STAGES.length - 1
+                          ? <PackageCheck className="h-3 w-3 text-emerald-600 dark:text-emerald-400" />
+                          : <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: AGENTS[s.agent].color }} />}
+                        {HANDOFFS[i]}
                       </div>
                     </div>
-                  </div>
-                  {/* 模块间传递 */}
-                  <div className="flex items-center gap-4 py-1.5 md:gap-5">
-                    <div className="flex h-7 w-14 shrink-0 items-center justify-center">
-                      {i === PIPELINE_STAGES.length - 1
-                        ? <PackageCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                        : <ArrowDown className="h-4 w-4 text-neutral-400 dark:text-neutral-500" />}
-                    </div>
-                    <div className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-neutral-300 bg-white/60 px-3 py-1 text-xs text-neutral-500 backdrop-blur dark:border-white/15 dark:bg-white/[0.03] dark:text-neutral-400">
-                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: AGENTS[s.agent].color }} />
-                      {HANDOFFS[i]}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                    {/* 模块间传递箭头 */}
+                    {i < PIPELINE_STAGES.length - 1 && (
+                      <div className="flex h-12 shrink-0 items-center px-1">
+                        <ArrowRight className="h-4 w-4 text-neutral-400 dark:text-neutral-500" />
+                      </div>
+                    )}
+                  </Fragment>
+                ))}
+              </div>
             </div>
           </div>
         </div>
