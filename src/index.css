@@ -1,0 +1,193 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.625rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei",
+      -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+      Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: #171717;
+    color: #fff;
+  }
+  .dark ::selection {
+    background: #22d3ee;
+    color: #0a0a12;
+  }
+}
+
+/* ============================================================
+   科幻流体光影背景
+   暗色：深空基底 + 青/蓝/紫/品红辉光
+   亮色：白底 + 柔和青蓝粉光晕
+   ============================================================ */
+
+.fluid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fluid-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform, opacity;
+}
+
+/* 暗色主题：高饱和霓虹辉光 */
+.dark .fluid-blob-1 {
+  width: 55vmax; height: 55vmax; left: -15vmax; top: -18vmax;
+  background: radial-gradient(circle at 35% 35%, rgba(34, 211, 238, 0.28), transparent 65%);
+  animation: fluid-drift-1 26s ease-in-out infinite alternate;
+}
+.dark .fluid-blob-2 {
+  width: 48vmax; height: 48vmax; right: -14vmax; top: -8vmax;
+  background: radial-gradient(circle at 60% 40%, rgba(99, 102, 241, 0.30), transparent 65%);
+  animation: fluid-drift-2 32s ease-in-out infinite alternate;
+}
+.dark .fluid-blob-3 {
+  width: 42vmax; height: 42vmax; left: 20vw; bottom: -22vmax;
+  background: radial-gradient(circle at 50% 50%, rgba(168, 85, 247, 0.24), transparent 65%);
+  animation: fluid-drift-3 38s ease-in-out infinite alternate;
+}
+.dark .fluid-blob-4 {
+  width: 30vmax; height: 30vmax; right: 8vw; bottom: -10vmax;
+  background: radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.16), transparent 60%);
+  animation: fluid-drift-1 30s ease-in-out infinite alternate-reverse;
+}
+.dark .fluid-blob-5 {
+  width: 24vmax; height: 24vmax; left: 38vw; top: 12vh;
+  background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.18), transparent 60%);
+  animation: fluid-drift-2 24s ease-in-out infinite alternate-reverse;
+}
+
+/* 亮色主题：柔和浅色光晕 */
+.fluid-blob-1 {
+  width: 55vmax; height: 55vmax; left: -15vmax; top: -18vmax;
+  background: radial-gradient(circle at 35% 35%, rgba(125, 211, 252, 0.35), transparent 65%);
+  animation: fluid-drift-1 26s ease-in-out infinite alternate;
+}
+.fluid-blob-2 {
+  width: 48vmax; height: 48vmax; right: -14vmax; top: -8vmax;
+  background: radial-gradient(circle at 60% 40%, rgba(165, 180, 252, 0.32), transparent 65%);
+  animation: fluid-drift-2 32s ease-in-out infinite alternate;
+}
+.fluid-blob-3 {
+  width: 42vmax; height: 42vmax; left: 20vw; bottom: -22vmax;
+  background: radial-gradient(circle at 50% 50%, rgba(196, 181, 253, 0.30), transparent 65%);
+  animation: fluid-drift-3 38s ease-in-out infinite alternate;
+}
+.fluid-blob-4 {
+  width: 30vmax; height: 30vmax; right: 8vw; bottom: -10vmax;
+  background: radial-gradient(circle at 50% 50%, rgba(249, 168, 212, 0.22), transparent 60%);
+  animation: fluid-drift-1 30s ease-in-out infinite alternate-reverse;
+}
+.fluid-blob-5 {
+  width: 24vmax; height: 24vmax; left: 38vw; top: 12vh;
+  background: radial-gradient(circle at 50% 50%, rgba(147, 197, 253, 0.26), transparent 60%);
+  animation: fluid-drift-2 24s ease-in-out infinite alternate-reverse;
+}
+
+/* 暗色下的细微星点网格，增强深空感 */
+.dark .fluid-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black, transparent 75%);
+}
+
+@keyframes fluid-drift-1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(9vw, 6vh) scale(1.15); }
+  100% { transform: translate(-4vw, 10vh) scale(0.92); }
+}
+@keyframes fluid-drift-2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-8vw, 8vh) scale(1.1); }
+  100% { transform: translate(6vw, -5vh) scale(1.18); }
+}
+@keyframes fluid-drift-3 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(7vw, -7vh) scale(1.12); }
+  100% { transform: translate(-9vw, -3vh) scale(0.95); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fluid-blob { animation: none !important; }
+}
