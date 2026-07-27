@@ -95,11 +95,31 @@ export async function checkStatus(apiKey: string): Promise<LlmStatus> {
 }
 
 async function postChat(body: Record<string, unknown>, apiKey: string, apiBase?: string): Promise<Response> {
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
-  if (apiKey.trim()) headers["x-llm-key"] = apiKey.trim();
-  if (apiKey.trim() && apiBase?.trim() && apiBase.trim() !== DEFAULT_BASE) {
-    headers["x-llm-base"] = apiBase.trim();
+  const key = apiKey.trim();
+  // 填了自有 Key：浏览器直连服务商（线上静态托管无代理，必须直连；本地开发同样可用）
+  if (key) {
+    const base = (apiBase?.trim() || DEFAULT_BASE).replace(/\/+$/, "");
+    // 与本地代理保持一致：不透传 temperature（Kimi k2 系模型会拒绝该字段）
+    const directBody = { ...body };
+    delete directBody.temperature;
+    try {
+      const res = await fetch(`${base}/chat/completions`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+        body: JSON.stringify(directBody),
+      });
+      if (!res.ok) {
+        const text = await res.text().catch(() => "");
+        throw new Error(`LLM 直连失败 (${res.status}): ${text.slice(0, 200)}`);
+      }
+      return res;
+    } catch (e) {
+      // 业务错误（4xx/5xx）直接抛出；网络/CORS 错误回退本地代理（仅本地开发存在）
+      if (!(e instanceof TypeError)) throw e;
+    }
   }
+  // 本地代理（内置引擎网关，仅本地开发环境存在）
+  const headers: Record<string, string> = { "Content-Type": "application/json" };
   const res = await fetch("/api/llm/chat", {
     method: "POST",
     headers,

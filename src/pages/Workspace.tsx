@@ -969,7 +969,7 @@ function SetupPanel({
 
           <p className="mt-2 text-xs leading-relaxed text-neutral-400 dark:text-neutral-500">
             支持任何 OpenAI 兼容服务：选择预设或自定义 API 地址 + 模型名即可。
-            密钥仅保存在本机浏览器，经本地代理转发。留空密钥则使用本机内置引擎；无任何密钥时自动降级为演示模式。
+            密钥仅保存在本机浏览器；填了 Key 后由浏览器直连所选服务，本地部署时留空 Key 则使用内置引擎。线上版本无内置引擎，需填入自有 Key 才能启动真实生成，否则为演示模式。
           </p>
         </div>
 
