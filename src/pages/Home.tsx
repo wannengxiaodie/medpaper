@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { ArrowRight, BookOpen, FlaskConical, PenLine, ShieldCheck, Sparkles, Microscope } from "lucide-react";
+import { ArrowDown, ArrowRight, BookOpen, FlaskConical, PackageCheck, PenLine, ShieldCheck, Sparkles, Microscope } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ThemeToggle from "@/components/ThemeToggle";
 import { PIPELINE_STAGES, AGENTS } from "@/engine/types";
@@ -9,6 +9,17 @@ const LOOP_CARDS = [
   { icon: FlaskConical, title: "假设与骨架", desc: "基于研究空白生成 IMRaD 论文大纲，明确研究假设与章节要点。" },
   { icon: ShieldCheck, title: "评审与质量控制", desc: "七维度量化评审，未达准入标准不进入写作——质量先于产出。" },
   { icon: PenLine, title: "写作与润色", desc: "逐章生成正文，术语规范化、格式校验与查重检测后输出投稿清单。" },
+];
+
+/** 各阶段向下游传递的结构化产物 */
+const HANDOFFS = [
+  "真实文献池 + 研究空白",
+  "IMRaD 论文骨架",
+  "七维评分报告",
+  "写作准入许可",
+  "最终标题（中英双语）",
+  "章节正文初稿",
+  "投稿级 Word 成稿",
 ];
 
 export default function Home() {
@@ -121,27 +132,50 @@ export default function Home() {
           <p className="mt-3 max-w-lg text-neutral-500 dark:text-neutral-400">
             每个阶段由专属智能体负责，输出结构化结果并驱动下一阶段。
           </p>
-          <div className="mt-12 space-y-0">
-            {PIPELINE_STAGES.map((s) => (
-              <div
-                key={s.key}
-                className="group flex items-center gap-6 border-b border-neutral-100 dark:border-white/10 py-5 transition hover:bg-neutral-50/80 dark:hover:bg-white/5 md:gap-10"
-              >
-                <div className="w-10 shrink-0 text-center text-2xl font-bold text-neutral-200 dark:text-white/15 transition group-hover:text-neutral-900">
-                  {String(s.index).padStart(2, "0")}
+          <div className="relative mt-14">
+            {/* 流水线轨道 */}
+            <div className="absolute bottom-10 left-[27px] top-10 w-px bg-gradient-to-b from-teal-600/50 via-amber-600/50 to-blue-600/50 dark:from-teal-400/40 dark:via-amber-400/40 dark:to-blue-400/40" />
+            {/* 轨道上的流动脉冲 */}
+            <div className="pipeline-pulse absolute left-[24px] top-10 h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
+            <div>
+              {PIPELINE_STAGES.map((s, i) => (
+                <div key={s.key}>
+                  {/* 模块 */}
+                  <div className="group relative flex items-center gap-4 md:gap-5">
+                    <div
+                      className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-base font-bold text-white shadow-md transition duration-300 group-hover:scale-110"
+                      style={{ backgroundColor: AGENTS[s.agent].color }}
+                    >
+                      {String(s.index).padStart(2, "0")}
+                    </div>
+                    <div className="flex min-w-0 flex-1 items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white/85 px-5 py-4 backdrop-blur transition duration-300 group-hover:-translate-y-0.5 group-hover:border-neutral-300 group-hover:shadow-lg dark:border-white/10 dark:bg-white/[0.04] dark:group-hover:border-white/25">
+                      <div className="min-w-0">
+                        <div className="text-base font-semibold">{s.title}</div>
+                        <div className="mt-0.5 truncate text-sm text-neutral-500 dark:text-neutral-400">{s.subtitle}</div>
+                      </div>
+                      <div
+                        className="hidden shrink-0 rounded-full px-3 py-1 text-xs font-medium text-white sm:block"
+                        style={{ backgroundColor: AGENTS[s.agent].color }}
+                      >
+                        {AGENTS[s.agent].name}
+                      </div>
+                    </div>
+                  </div>
+                  {/* 模块间传递 */}
+                  <div className="flex items-center gap-4 py-1.5 md:gap-5">
+                    <div className="flex h-7 w-14 shrink-0 items-center justify-center">
+                      {i === PIPELINE_STAGES.length - 1
+                        ? <PackageCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                        : <ArrowDown className="h-4 w-4 text-neutral-400 dark:text-neutral-500" />}
+                    </div>
+                    <div className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-neutral-300 bg-white/60 px-3 py-1 text-xs text-neutral-500 backdrop-blur dark:border-white/15 dark:bg-white/[0.03] dark:text-neutral-400">
+                      <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: AGENTS[s.agent].color }} />
+                      {HANDOFFS[i]}
+                    </div>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-lg font-semibold">{s.title}</div>
-                  <div className="text-sm text-neutral-500 dark:text-neutral-400">{s.subtitle}</div>
-                </div>
-                <div
-                  className="hidden rounded-full px-3 py-1 text-xs font-medium text-white sm:block"
-                  style={{ backgroundColor: AGENTS[s.agent].color }}
-                >
-                  {AGENTS[s.agent].name}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
