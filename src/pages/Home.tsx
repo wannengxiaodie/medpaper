@@ -133,17 +133,17 @@ export default function Home() {
           <p className="mt-3 max-w-lg text-neutral-500 dark:text-neutral-400">
             每个阶段由专属智能体负责，输出结构化结果并驱动下一阶段。
           </p>
-          <div className="relative mt-14 overflow-x-auto pb-2">
-            <div className="relative min-w-[880px] px-2">
-              {/* 横向流水线轨道（穿过节点中心） */}
-              <div className="absolute left-0 right-0 top-[23px] h-px bg-gradient-to-r from-teal-600/50 via-amber-600/50 to-blue-600/50 dark:from-teal-400/40 dark:via-amber-400/40 dark:to-blue-400/40" />
+          <div className="relative mt-14 pb-2">
+            <div className="relative px-2">
+              {/* 横向流水线轨道（穿过节点中心，仅宽屏一排时显示） */}
+              <div className="absolute left-0 right-0 top-[23px] hidden h-px bg-gradient-to-r from-teal-600/50 via-amber-600/50 to-blue-600/50 lg:block dark:from-teal-400/40 dark:via-amber-400/40 dark:to-blue-400/40" />
               {/* 轨道上的流动脉冲 */}
-              <div className="pipeline-pulse absolute top-[19px] h-2 w-2 rounded-full bg-neutral-900 dark:bg-white" />
-              <div className="flex items-start">
+              <div className="pipeline-pulse absolute top-[19px] hidden h-2 w-2 rounded-full bg-neutral-900 lg:block dark:bg-white" />
+              <div className="flex flex-wrap items-start justify-center gap-x-3 gap-y-6">
                 {PIPELINE_STAGES.map((s, i) => (
                   <Fragment key={s.key}>
                     {/* 模块 */}
-                    <div className="group flex min-w-0 flex-1 flex-col items-center text-center">
+                    <div className="group flex w-[46%] min-w-0 flex-col items-center text-center sm:w-[30%] lg:w-auto lg:min-w-0 lg:flex-1">
                       <div
                         className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-sm font-bold text-white shadow-md transition duration-300 group-hover:scale-110"
                         style={{ backgroundColor: AGENTS[s.agent].color }}
@@ -168,9 +168,9 @@ export default function Home() {
                         {HANDOFFS[i]}
                       </div>
                     </div>
-                    {/* 模块间传递箭头 */}
+                    {/* 模块间传递箭头（仅宽屏一排时显示） */}
                     {i < PIPELINE_STAGES.length - 1 && (
-                      <div className="flex h-12 shrink-0 items-center px-1">
+                      <div className="hidden h-12 shrink-0 items-center px-1 lg:flex">
                         <ArrowRight className="h-4 w-4 text-neutral-400 dark:text-neutral-500" />
                       </div>
                     )}
